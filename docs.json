@@ -1,0 +1,9 @@
+{
+    "name": "Art Shop - Flutter & Firebase eCommerce Template",
+    "navigation": [
+        ["Start Here", "/index"],
+        ["Installation", "/installation"],
+        ["FAQ", "/faq"],
+        ["Web Demo", "https://my-shop-ecommerce-dev.web.app/"]
+    ]
+}
