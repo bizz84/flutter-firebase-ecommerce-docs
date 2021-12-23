@@ -1,0 +1,50 @@
+# Installation 
+
+## Downloading the source code
+
+You can download source code snapshots from the [course](#) lectures.
+
+These snapshots will include both the **Flutter** and **Cloud Functions** code needed to run the project.
+
+However, some Firebase configuration files will be missing:
+
+TODO: Image
+
+Here's how to generate them:
+
+## Firebase setup
+
+Install the [`flutterfire_cli`](https://pub.dev/packages/flutterfire_cli) from the command line:
+
+```
+dart pub global activate flutterfire_cli
+```
+
+TODO: Image.
+
+Then, generate the missing `firebase_options_dev.dart`, `firebase_options_staging.dart`, and `firebase_options_prod.dart` files like this:
+
+
+TODO: Complete
+```
+flutterfire config \
+```
+
+This will automatically generate Firebase projects to match the package name / bundle ID of the Flutter client.
+
+## Stripe setup
+
+- Register for a Stripe developer account
+- generate api keys
+- set them with `firebase config:set`
+
+## Very Good CLI
+
+The Flutter demo project was created using [Very Good CLI](https://github.com/VeryGoodOpenSource/very_good_cli), which offers [build flavors](https://docs.flutter.dev/deployment/flavors), continuous integration, and much more out of the box.
+
+This can be installed from the command line:
+
+```
+dart pub global activate very_good_cli
+```
+
