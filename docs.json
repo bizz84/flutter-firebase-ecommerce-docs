@@ -3,7 +3,7 @@
     "sidebar": [
         ["Start Here", "/index"],
         ["Installation", "/installation"],
-        ["How to setup a new Firebase environment", "/environment_config.mdx"],
+        ["How to setup a new Firebase environment", "/environment_config"],
         [
             "FAQ",
             [
