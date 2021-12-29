@@ -1,0 +1,53 @@
+# Firestore: "The query requires an index" (how to manage indexes in Firestore)
+
+Some Firestore queries require to filter and/or order data at the same time. Example:
+
+```dart
+  Query<Order> _userOrdersRef(String uid) => _firestore
+      .collection(adminOrdersPath())
+      .where('userId', isEqualTo: uid)
+      .orderBy('orderDate', descending: true)
+      .withConverter(
+        fromFirestore: (doc, _) => Order.fromMap(doc.data()!, doc.id),
+        toFirestore: (Order order, options) => order.toMap(),
+      );
+```
+
+In these scenarios, it's necessary to create a **Firestore index**. 
+
+And if we run the app without an index, we get the following error:
+
+```
+[Firestore]: Listen for Query(target=Query(orders where userId == 3xu6cQLVHKNMUsTAX9EHtfs95Bq2 order by -orderDate, -__name__);limitType=LIMIT_TO_FIRST) failed: Status{code=FAILED_PRECONDITION, description=The query requires an index. You can create it here: https://console.firebase.google.com/v1/r/project/my-shop-ecommerce-dev/firestore/indexes?create_composite=ClRwcm9qZWN0cy9teS1zaG9wLWVjb21tZXJjZS1kZXYvZGF0YWJhc2VzLyhkZWZhdWx0KS9jb2xsZWN0aW9uR3JvdXBzL29yZGVycy9pbmRleGVzL18QARoKCgZ1c2VySWQQARoNCglvcmRlckRhdGUQAhoMCghfX25hbWVfXxAC, cause=null}
+```
+
+We can create the index by clicking on the link in the error above. This will take us to the Firestore console where we're prompted to add a composite index:
+
+![Create a composite index](images/create-composite-index-firestore.png)
+
+The same index can be configured with the Firebase CLI by updating the `firestore.indexes.json` file:
+
+
+```json
+{
+  "indexes": [
+    {
+      "collectionGroup": "orders",
+      "queryScope": "COLLECTION",
+      "fields" : [
+        { "fieldPath" : "userId", "order": "ASCENDING" },
+        { "fieldPath" : "orderDate", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
+```
+
+> Note: when creating indexes manually, follow this [JSON index definition reference](https://firebase.google.com/docs/reference/firestore/indexes/)
+
+### Related
+
+- [Manage indexes in Cloud Firestore](https://firebase.google.com/docs/firestore/query-data/indexing)
+- [Cloud Firestore Index Definition Reference](https://firebase.google.com/docs/reference/firestore/indexes/)
+- [Index types in Cloud Firestore](https://firebase.google.com/docs/firestore/query-data/index-overview)
