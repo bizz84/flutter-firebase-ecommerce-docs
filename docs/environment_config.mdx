@@ -1,8 +1,24 @@
-## How to setup a new Firebase environment
+# How to setup a new Firebase environment
 
-First, create the new Firebase project and give it a name (e.g. `my-shop-ecommerce-stg`).
+### Creating a new Firebase project
+
+From the [Firebase console](https://console.firebase.google.com/u/0/):
+
+- create a new Firebase project
+- give it a name (e.g. `my-shop-ecommerce-stg`)
+- when prompted, you can **disable** Google Analytics
+
+Once inside the project:
+
+- Open the **Authentication** tab, select "Sign-in method" and enable Email/Password authentication
+- Open the **Firestore Database** tab, and enable Firestore for the project
+- Open the **Functions** tab, and enable Cloud Functions for the project
+  - Note: to do this, you'll need to opt-in to the **Blaze plan** (which requires a credit card configured through the billing section of your Google Cloud Account)
+  - You'll also be prompted to set a budget alert
 
 ### Run flutterfire config for the given environment
+
+Back on the terminal, run the following (make sure to use **your** app/bundle ID):
 
 ```
 flutterfire config \
@@ -13,13 +29,7 @@ flutterfire config \
   --android-app-id=com.example.verygoodcore.my_shop_ecommerce_flutter.stg
 ```
 
-### Enable Email authentication on the supported Firebase sign in methods
-
-### Enable Cloud Firestore
-
-### Enable Cloud Functions
-
-Also opt in to the blaze plan (requires credit card)
+For more info, you can run `flutterfire configure --help`
 
 ### Firebase CLI
 
@@ -133,7 +143,7 @@ https://dashboard.stripe.com/test/webhooks
 
 From here, select the webhook and reveal the webhook signing secret:
 
-![](images/webhook-signing-secret.png)
+![How to reveal the webhook signing secret](images/webhook-signing-secret.png)
 
 Copy this value, then set it in the Firebase config:
 
@@ -159,7 +169,7 @@ flutter build web --target lib/main_staging.dart --dart-define STRIPE_PUBLISHABL
 
 Alternatively, use the `build-web.sh` command provided in the project.
 
-## Uploading all the product image to Firebase Storage
+## Uploading all the product images to Firebase Storage
 
 Open the Firebase console and select the `Storage` tab.
 
@@ -167,7 +177,7 @@ From there, create a folder called `products` and upload the images to it.
 
 ## Enabling CORS for images in Firebase Storage 
 
-See [this FAQ](faq/failed-to-load-network-image-storage-cors.mdx) for more details.
+See [this FAQ](/faq/failed-to-load-network-image-storage-cors) for more details.
 
 ## Generating the product list in Cloud Firestore
 
@@ -183,5 +193,5 @@ curl -X POST https://us-central1-my-shop-ecommerce-stg.cloudfunctions.net/genera
 
 Once this is done, all the products should show inside the Cloud Firestore console:
 
-![](images/generated-products.png)
+![Products generated in Firestore](images/generated-products-firestore.png)
 
