@@ -3,7 +3,15 @@
     "sidebar": [
         ["Start Here", "/index"],
         ["Installation", "/installation"],
-        ["FAQ", "/faq"],
+        ["How to setup a new Firebase environment", "/environment_config.mdx"],
+        [
+            "FAQ",
+            [
+                ["Where is the source code for this app?", "/faq/where-is-source-code"],
+                ["\"Failed to load network image\" on Flutter web builds", "/faq/failed-to-load-network-image-storage-cors"],
+                ["File google-services.json is missing. The Google Services Plugin cannot function without it.", "/faq/google-services-json-product-flavors"]
+            ]
+        ],
         ["Web Demo", "https://my-shop-ecommerce-dev.web.app/"]
     ]
 }
