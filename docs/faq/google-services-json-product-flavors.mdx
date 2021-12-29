@@ -1,0 +1,33 @@
+# File google-services.json is missing. The Google Services Plugin cannot function without it. 
+
+Even though Firebase is initialized from the Dart side with this command:
+
+```dart
+await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+```
+
+Running the app on Android without the `google-services.json` file inside `android/app` may cause this error:
+
+```
+Launching lib/main_staging.dart on sdk gphone x86 in debug mode...
+lib/main_staging.dart:1
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:processStagingDebugGoogleServices'.
+> File google-services.json is missing. The Google Services Plugin cannot function without it. 
+   Searched Location: 
+  /Users/andrea/work/codewithandrea/flutter-ecommerce-course/my_shop_ecommerce_flutter/android/app/src/staging/debug/google-services.json
+  /Users/andrea/work/codewithandrea/flutter-ecommerce-course/my_shop_ecommerce_flutter/android/app/src/debug/staging/google-services.json
+  /Users/andrea/work/codewithandrea/flutter-ecommerce-course/my_shop_ecommerce_flutter/android/app/src/staging/google-services.json
+  /Users/andrea/work/codewithandrea/flutter-ecommerce-course/my_shop_ecommerce_flutter/android/app/src/debug/google-services.json
+  /Users/andrea/work/codewithandrea/flutter-ecommerce-course/my_shop_ecommerce_flutter/android/app/src/stagingDebug/google-services.json
+  /Users/andrea/work/codewithandrea/flutter-ecommerce-course/my_shop_ecommerce_flutter/android/app/google-services.json
+```
+
+The solution is to copy the `google-services.json` **for each flavor** into the correct directory (for example: `android/app/src/staging/google-services.json`).
+
+Related:
+
+- [google-services.json for different productFlavors](https://stackoverflow.com/questions/30772201/google-services-json-for-different-productflavors)

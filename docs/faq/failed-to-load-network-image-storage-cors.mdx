@@ -1,0 +1,34 @@
+# "Failed to load network image" on Flutter web builds
+
+When running Flutter web for the first time on a new Firebase project, images may fail to load:
+
+```
+Failed to load network image.
+Image URL: https://firebasestorage.googleapis.com/v0/b/my-shop-ecommerce-stg.appspot.com/o/products%2Fsalt-pepper-lemon.jpg?alt=media
+Trying to load an image from another domain? Find answers at:
+https://flutter.dev/docs/development/platform-integration/web-images
+```
+
+The solution is to open the [GCloud Dashboard](https://console.cloud.google.com/home/dashboard) for the current project.
+
+Then, click on "Activate Google Cloud Shell" on the top right corner:
+
+![](../images/activate-google-cloud-shell.png)
+
+On the terminal, run the following:
+
+```
+echo '[{"origin": ["*"],"responseHeader": ["Content-Type"],"method": ["GET", "HEAD"],"maxAgeSeconds": 3600}]' > cors-config.json
+```
+
+Replace YOUR_BUCKET_NAME with your actual bucket name in the following command to update the cors-settings from your bucket:
+
+```
+gsutil cors set cors-config.json gs://YOUR_BUCKET_NAME
+```
+
+Related:
+
+- [Flutter web can't load network image from another domain](https://stackoverflow.com/questions/65653801/flutter-web-cant-load-network-image-from-another-domain)
+- [How do I set up CORS for my Google Cloud Storage Bucket?](https://bitmovin.com/docs/encoding/faqs/how-do-i-set-up-cors-for-my-google-cloud-storage-bucket)
+

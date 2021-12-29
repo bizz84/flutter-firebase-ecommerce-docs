@@ -1,0 +1,187 @@
+## How to setup a new Firebase environment
+
+First, create the new Firebase project and give it a name (e.g. `my-shop-ecommerce-stg`).
+
+### Run flutterfire config for the given environment
+
+```
+flutterfire config \
+  --project=my-shop-ecommerce-stg \
+  --out=lib/firebase_options.stg.dart \
+  --ios-bundle-id=com.example.verygoodcore.my-shop-ecommerce-flutter.stg \
+  --macos-bundle-id=com.example.verygoodcore.my-shop-ecommerce-flutter.stg \
+  --android-app-id=com.example.verygoodcore.my_shop_ecommerce_flutter.stg
+```
+
+### Enable Email authentication on the supported Firebase sign in methods
+
+### Enable Cloud Firestore
+
+### Enable Cloud Functions
+
+Also opt in to the blaze plan (requires credit card)
+
+### Firebase CLI
+
+Run `firebase use` and select the desired Firebase project.
+
+
+## Firebase config for Stripe keys
+
+Stripe keys should be set using Firebase config via the Firebase CLI:
+
+```
+firebase functions:config:set stripe.public_key="pk_test_YOUR_STRIPE_PUBLIC_KEY"
+firebase functions:config:set stripe.secret_key="pk_test_YOUR_STRIPE_SECRET_KEY"
+```
+
+
+To create a new Stripe webhook, visit:
+
+https://dashboard.stripe.com/test/webhooks/create
+
+From here, enter the endpoint URL that was published when the Cloud functions were deployed. e.g:
+
+```
+https://us-central1-my-shop-ecommerce-stg.cloudfunctions.net/stripeWebhook
+```
+
+> Note: each Stripe Webhook will have a different URL and webhook key.
+
+Then, select all the events that should be sent to that webhook.
+
+For our app, we'll need:
+
+- `payment_intent.succeeded`
+- `payment_intent.payment_failed`
+- `setup_intent.setup_failed`
+- `setup_intent.succeeded`
+- `setup_intent.created`
+
+Note how this will automatically generate the server code for the webhook. (however this uses Express, while we want Cloud Functions)
+
+```js
+// server.js
+//
+// Use this sample code to handle webhook events in your integration.
+//
+// 1) Paste this code into a new file (server.js)
+//
+// 2) Install dependencies
+//   npm install stripe
+//   npm install express
+//
+// 3) Run the server on http://localhost:4242
+//   node server.js
+
+const stripe = require('stripe');
+const express = require('express');
+const app = express();
+
+// This is your Stripe CLI webhook secret for testing your endpoint locally.
+const endpointSecret = "whsec_rC3E4OLt4AQLXxfXgZarBpfx0bqHctMY";
+
+app.post('/webhook', express.raw({type: 'application/json'}), (request, response) => {
+  const sig = request.headers['stripe-signature'];
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+  } catch (err) {
+    response.status(400).send(`Webhook Error: ${err.message}`);
+    return;
+  }
+
+  // Handle the event
+  switch (event.type) {
+    case 'payment_intent.payment_failed':
+      const paymentIntent = event.data.object;
+      // Then define and call a function to handle the event payment_intent.payment_failed
+      break;
+    case 'payment_intent.succeeded':
+      const paymentIntent = event.data.object;
+      // Then define and call a function to handle the event payment_intent.succeeded
+      break;
+    case 'setup_intent.created':
+      const setupIntent = event.data.object;
+      // Then define and call a function to handle the event setup_intent.created
+      break;
+    case 'setup_intent.setup_failed':
+      const setupIntent = event.data.object;
+      // Then define and call a function to handle the event setup_intent.setup_failed
+      break;
+    case 'setup_intent.succeeded':
+      const setupIntent = event.data.object;
+      // Then define and call a function to handle the event setup_intent.succeeded
+      break;
+    // ... handle other event types
+    default:
+      console.log(`Unhandled event type ${event.type}`);
+  }
+
+  // Return a 200 response to acknowledge receipt of the event
+  response.send();
+});
+
+app.listen(4242, () => console.log('Running on port 4242'));
+```
+
+One the webook is  created, it is accessible through the list of webhooks:
+
+https://dashboard.stripe.com/test/webhooks
+
+From here, select the webhook and reveal the webhook signing secret:
+
+![](images/webhook-signing-secret.png)
+
+Copy this value, then set it in the Firebase config:
+
+```
+firebase functions:config:set stripe.webhook_secret_key="whsec_YOUR_WEBHOOK_SECRET"
+```
+
+## Deploying the functions
+
+Once all the secrets have been set, deploy the functions again:
+
+```
+firebase deploy --only functions
+```
+
+## Building the app for Flutter web
+
+Build the app with this command:
+
+```
+flutter build web --target lib/main_staging.dart --dart-define STRIPE_PUBLISHABLE_KEY=pk_test_YOUR_STRIPE_PUBLIC_KEY --release
+```
+
+Alternatively, use the `build-web.sh` command provided in the project.
+
+## Uploading all the product image to Firebase Storage
+
+Open the Firebase console and select the `Storage` tab.
+
+From there, create a folder called `products` and upload the images to it.
+
+## Enabling CORS for images in Firebase Storage 
+
+See [this FAQ](faq/failed-to-load-network-image-storage-cors.mdx) for more details.
+
+## Generating the product list in Cloud Firestore
+
+The Cloud Function called `generateProductList` will generate a list of products in the Firestore collection `products`.
+
+To run this function, run the following command:
+
+```
+curl -X POST https://us-central1-my-shop-ecommerce-stg.cloudfunctions.net/generateProductList
+```
+
+> Note: replace the host name with your own firebase project ID.
+
+Once this is done, all the products should show inside the Cloud Firestore console:
+
+![](images/generated-products.png)
+
