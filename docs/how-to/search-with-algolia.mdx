@@ -1,0 +1,48 @@
+# Search with Algolia: Setup steps
+
+This page is a work in progress.
+
+## Register for a new Algolia account
+
+## Create a new Algolia application
+
+## Create a new API Key and add the `search`, `addObject`, `deleteObject` ACLs
+
+## Configure the extension
+
+This can be done by installing in the Firebase console, or using the Firebase CLI, from this page:
+
+- [Search with Algolia | Firebase Extensions](https://firebase.google.com/products/extensions/algolia-firestore-algolia-search)
+
+### Indexable fields
+
+These are the fields that are returned as part of the search results.
+
+Leave empty to match all the fields in the original Firestore documents (this also means that the same data models and parsing code can be reused).
+
+### Searchable attributes
+
+In the Algolia Index Configuration page, the correct **searchable attributes** need to be set. These are used to match the search query with the fields in the document.
+
+### Generating the index data
+
+The index data is generated automatically when the Firestore documents are changed.
+
+This means that any **previously existing** Firestore documents will **not** be indexed.
+
+One way around this is to delete all the Firestore data and generate it again, as this will trigger the indexing.
+
+If this is not an option, consider using the [Algolia Importing API](https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/how-to/importing-with-the-api/).
+
+
+## Alternative Search Strategies
+
+- [Google Firestore: Query on substring of a property value (text search)](https://stackoverflow.com/questions/46568142/google-firestore-query-on-substring-of-a-property-value-text-search)
+
+### References
+
+- [Search with Algolia | Firebase Extensions](https://firebase.google.com/products/extensions/algolia-firestore-algolia-search)
+- [Full-Text Search in Flutter with Firestore and Algolia](https://medium.com/flutter-community/full-text-search-in-flutter-with-firestore-and-algolia-8de1a10b0c49)
+- ["Not enough rights to add an object" error while implementing Algolia](https://stackoverflow.com/questions/36915651/not-enough-rights-to-add-an-object-error-while-implementing-algolia)
+- [RxDart by example: querying the GitHub Search API with switchMap & debounce](https://codewithandrea.com/videos/rxdart-by-example-github-search/)
+- [Algolia Pricing](https://www.algolia.com/pricing/)

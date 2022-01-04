@@ -1,0 +1,32 @@
+# Stripe Integration
+
+## Stripe payment workflow
+
+When the user clicks on the "Pay" button in the app, `CheckoutService.pay()` is called.
+
+In turn, the `createOrderPaymentIntent` cloud function is called, which:
+
+- checks if all items are in stock and calculates the cart total
+- finds or creates a Stripe customer for the user `uid` (this also 
+- writes a document into `customers/${customerId}` with the `uid` of the user so that later on we can do a reverse-lookup
+- creates a payment intent (`createPaymentIntent`), which returns the necessary data to the client
+
+Next, the payment sheet is initialized and presented in two stages:
+
+1. the user address is retrieved and used to initialize the payment sheet (via `StripeRepository.initPaymentSheet()`)
+2. `presentPaymentSheet()` is called
+
+At this point, the payment sheet UI is presented and the user can make the payment.
+
+If `payment_intent.succeeded` is received, `fullfillOrder` is called, which in turn:
+
+- retrieves the user `uid` with a reverse-lookup in `customers/${customerId}`
+- copies all the cart items into an array and removes them from the cart
+- creates an order document with all the details in  `users/${uid}/orders/${orderId}`
+- deletes the cart document
+
+As a result, the user can see the new order appear in the list of orders in the app
+
+### TODO
+
+- store the `lastOrderId` in `customers/${customerId}`

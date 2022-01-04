@@ -8,7 +8,15 @@
             "Reference Guides",
             [
                 ["How to manage indexes in Firestore", "/how-to/managing-firestore-indexes"],
-                ["Firebase Custom Claims", "/how-to/firebase-custom-claims"]
+                ["Firebase Custom Claims", "/how-to/firebase-custom-claims"],
+                ["Search with Algolia", "/how-to/search-with-algolia"]
+            ]
+        ],
+        [
+            "App Features",
+            [
+                ["Stripe integration", "/features/stripe-integration"],
+                ["Client vs Server-side Search for Products List", "/features/products-search"]
             ]
         ],
         [

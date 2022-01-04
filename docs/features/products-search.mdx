@@ -1,0 +1,63 @@
+# Client vs Server-side Search for Products List
+
+The eCommerce app has a search box in the products page.
+
+When the user enters some text in the search box, the list of products is filtered to show only those that match the search query.
+
+While implementing this, two strategies have been evaulated.
+
+## Client-side Search
+
+This is ideal when the number of products is small (less than 100).
+
+It is implemented using a `ProductsSearchService` class, which works as follows:
+
+- whenever the search text changes, the `search(String query)` method is called
+- in turn, this adds the query to a `Stream` of search terms
+- internally, all search terms are debounced to reduce the number of requests sent to the server
+- then, the **entire product list** is pulled from the server and filtered using the search query
+
+This is how the filtering looks like:
+
+```dart
+Future<List<Product>> searchProducts(String query) async {
+    // 1. Get all products from server
+    final productsList = await getProductsList();
+    // 2. Perform filtering client-side
+    return productsList
+        .where((product) =>
+            product.title.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+}
+```
+
+This allows us to implement "full-text" search on the product title, which is not something that is supported by Firestore.
+
+The drawback is that the products list is pulled from the server every time the search text changes.
+
+### Possible optimizations
+
+To optimize this, we could cache the products list locally (since it rarely ever changes), and do the filtering based on that.
+
+## Server-side Search with Algolia
+
+Client-side search works for the product list, but becomes very inefficient for large collections.
+
+In such case, full-text search should be done on the server.
+
+This is **not** supported by Firebase, and the [official documentation](https://firebase.google.com/docs/firestore/solutions/search) recommends to use 3rd party services such as Elastic, Algolia, or Typesense.
+
+Search with Algolia is supported as a [Firebase Extension](https://firebase.google.com/products/extensions/algolia-firestore-algolia-search), making it easy to setup.
+
+The only drawback is the [pricing](https://www.algolia.com/pricing/), which is fairly expensive.
+
+## Notes
+
+Since the eCommerce app is a project for demonstration purposes, the client-side search is used.
+
+For more info on setting up Algolia, see the [Search with Algolia setup page](/how-to/search-with-algolia).
+
+### References
+
+- [Cloud Firestore | FlutterFire docs](https://firebase.flutter.dev/docs/firestore/usage)
+- [Search with Algolia | Firebase Extensions](https://firebase.google.com/products/extensions/algolia-firestore-algolia-search)
