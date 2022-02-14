@@ -1,0 +1,13 @@
+# How can I shut down the local Firebase emulators?
+
+Short answer:
+
+- Find out on which port the local emulator is running, then kill it:
+
+```
+lsof -ti :8081 | xargs kill
+```
+
+More info here:
+
+- [How can I shut down the local firebase emulators?](https://stackoverflow.com/questions/62684701/how-can-i-shut-down-the-local-firebase-emulators)

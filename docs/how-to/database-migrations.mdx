@@ -1,0 +1,47 @@
+# Firestore Database migrations
+
+**Example: Change cart items from a list to a map.**
+
+Affected documents:
+
+- `/users/{userId}/private/cart`
+- `/users/{userId}/orders/{orderId}`
+
+## Defensive code on client
+
+Added some code in `cart.dart` to deal with the old format in Firestore.
+
+```dart
+  static Map<String, int> _parseItems(dynamic value) {
+    if (value is List<dynamic>) {
+      final items = List<Item>.from(value.map((x) => Item.fromMap(x)));
+      return Map<String, int>.fromEntries(
+          items.map((item) => MapEntry(item.productId, item.quantity)));
+    } else if (value is Map<String, dynamic>) {
+      return Map<String, int>.from(value);
+    } else {
+      throw ArgumentError('Invalid items: $value');
+    }
+  }
+```
+
+## Reasons for migration
+
+### Cart
+
+Users running the live app may choose to checkout a shopping cart that was using the old format.
+
+If the updated cloud functions are running, this will cause a failure in order fullfillment.
+
+So it's necessary to migrate all cart items to the new format (or wipe the shopping cart for existing users).
+
+### Orders
+
+Orders data is safe to be stored in the old format as long as the new client has some defensive code.
+
+### Old clients
+
+Once the updated cloud functions are deployed, the web app will be deployed as well so everyone gets the new code.
+
+Though if the app was deployed to the app store, a force upgrade would be required.
+

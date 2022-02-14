@@ -1,33 +1,76 @@
 {
     "name": "Flutter & Firebase eCommerce Template - Documentation",
     "sidebar": [
-        ["Start Here", "/index"],
-        ["Installation", "/installation"],
-        ["How to setup a new Firebase environment", "/environment_config"],
+        [
+            "Start Here",
+            "/index"
+        ],
+        [
+            "Installation",
+            "/installation"
+        ],
+        [
+            "How to setup a new Firebase environment",
+            "/environment_config"
+        ],
         [
             "Reference Guides",
             [
-                ["How to manage indexes in Firestore", "/how-to/managing-firestore-indexes"],
-                ["Firebase Custom Claims", "/how-to/firebase-custom-claims"],
-                ["Search with Algolia", "/how-to/search-with-algolia"]
+                [
+                    "How to manage indexes in Firestore",
+                    "/how-to/managing-firestore-indexes"
+                ],
+                [
+                    "Firebase Custom Claims",
+                    "/how-to/firebase-custom-claims"
+                ],
+                [
+                    "Search with Algolia",
+                    "/how-to/search-with-algolia"
+                ]
             ]
         ],
         [
             "App Features",
             [
-                ["Stripe integration", "/features/stripe-integration"],
-                ["Client vs Server-side Search for Products List", "/features/products-search"]
+                [
+                    "Stripe integration",
+                    "/features/stripe-integration"
+                ],
+                [
+                    "Client vs Server-side Search for Products List",
+                    "/features/products-search"
+                ]
             ]
         ],
         [
             "FAQ",
             [
-                ["Where is the source code for this app?", "/faq/where-is-source-code"],
-                ["\"Failed to load network image\" on Flutter web builds", "/faq/failed-to-load-network-image-storage-cors"],
-                ["File google-services.json is missing. The Google Services Plugin cannot function without it.", "/faq/google-services-json-product-flavors"]
-                
+                [
+                    "CocoaPods not installed. Skipping pod install",
+                    "/faq/cocoapods-not-installed"
+                ],
+                [
+                    "\"Failed to load network image\" on Flutter web builds",
+                    "/faq/failed-to-load-network-image-storage-cors"
+                ],
+                [
+                    "File google-services.json is missing. The Google Services Plugin cannot function without it.",
+                    "/faq/google-services-json-product-flavors"
+                ],
+                [
+                    "How can I shut down the local Firebase emulators?",
+                    "/faq/shutdown-local-firebase-emulator"
+                ],
+                [
+                    "Where is the source code for this app?",
+                    "/faq/where-is-source-code"
+                ]
             ]
         ],
-        ["Web Demo", "https://my-shop-ecommerce-dev.web.app/"]
+        [
+            "Web Demo",
+            "https://my-shop-ecommerce-dev.web.app/"
+        ]
     ]
 }
