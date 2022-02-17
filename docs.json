@@ -69,6 +69,15 @@
             ]
         ],
         [
+            "Other Resources",
+            [
+                [
+                    "Stuff the docs won't tell you, re: Firebase Setup",
+                    "https://www.reddit.com/r/FlutterDev/comments/srb4ne/stuff_the_docs_wont_tell_you_re_firebase_setup/"
+                ]
+            ]
+        ],
+        [
             "Web Demo",
             "https://my-shop-ecommerce-dev.web.app/"
         ]
